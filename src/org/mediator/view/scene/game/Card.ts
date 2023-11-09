@@ -41,23 +41,24 @@ export default class Card extends PIXI.Container {
     text.anchor.set(0.5, 0.5)
     this.text = text
 
-    this.buttonMode = true
-    this.interactive = true
-    this.on('pointerover', (event) => {
-      this.filters = [new PIXI.filters['OutlineFilter'](2, 0x99ff99)];
-    })
-    this.on('pointerout', (event) => {
-      this.filters = [];
-    })
-    this.on('pointertap', (event) => {
-      this.scene.emit(GameScene.CLICK_CARD, event.currentTarget)
-    })
+
   }
 
   // val 1 被覆盖 0 没有被覆盖
   setState(val: number) {
-    this.graphics.visible = (val === 0 ? false : true);
-    this.buttonMode = val === 0 ? true : false;
-    this.interactive = val === 0 ? true : false;
+    if (val === 0) {
+      this.graphics.visible = false;
+      this.buttonMode = true
+      this.interactive = true
+      this.on('pointerover', (event) => {
+        this.filters = [new PIXI.filters['OutlineFilter'](2, 0x99ff99)];
+      })
+      this.on('pointerout', (event) => {
+        this.filters = [];
+      })
+      this.on('pointertap', (event) => {
+        this.scene.emit(GameScene.CLICK_CARD, event.currentTarget)
+      })
+    }
   }
 }
