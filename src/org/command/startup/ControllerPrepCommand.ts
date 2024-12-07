@@ -18,5 +18,6 @@ export default class ControllerPrepCommand extends SimpleCommand implements ICom
     this.facade.registerCommand(GameCommand.GAME_OVER, GameCommand)
     this.facade.registerCommand(GameCommand.CARD_CHECK, GameCommand)
     this.facade.registerCommand(GameCommand.CHECK_OVER_RELATIONSHIP, GameCommand)
+    this.facade.registerCommand(GameCommand.CHECK_SAME_CARD, GameCommand)
   }
 }

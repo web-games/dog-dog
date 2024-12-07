@@ -2,21 +2,20 @@ import SimpleCommand = puremvc.SimpleCommand
 import ICommand = puremvc.ICommand
 import INotification = puremvc.INotification
 
-import Game from '../../Game';
-import Scene from '../mediator/view/scene/Scene';
+import Scene from '../mediator/scenes/Scene';
 import ApplicationFacade from '../ApplicationFacade';
 
-import LoadingScene from '../mediator/view/scene/load/LoadScene';
-import LoadingSceneMediator from '../mediator/LoadSceneMediator';
+import LoadingScene from '../mediator/scenes/loading/LoadingScene';
+import LoadingSceneMediator from '../mediator/LoadingSceneMediator';
 
-import StartScene from '../mediator/view/scene/start/StartScene';
+import StartScene from '../mediator/scenes/start/StartScene';
 import StartSceneMediator from '../mediator/StartSceneMediator';
-import GameScene from '../mediator/view/scene/game/GameScene';
+import GameScene from '../mediator/scenes/game/GameScene';
 import GameSceneMediator from '../mediator/GameSceneMediator';
 import GameProxy from '../proxy/GameProxy';
-import EndScene from '../mediator/view/scene/end/EndScene'
+import EndScene from '../mediator/scenes/end/EndScene'
 import EndSceneMediator from '../mediator/EndSceneMediator'
-import GameCommand from './GameCommand'
+import Application from "../Application";
 
 export default class SceneCommand extends SimpleCommand implements ICommand {
 
@@ -35,7 +34,7 @@ export default class SceneCommand extends SimpleCommand implements ICommand {
   public execute(notification: INotification) {
     console.log('SceneCommand notification:', notification)
 
-    let game: Game = (this.facade as ApplicationFacade).game;
+    let game: Application = (this.facade as ApplicationFacade).application;
     let name = notification.getName()
     let body = notification.getBody()
     let {from} = body
@@ -47,6 +46,8 @@ export default class SceneCommand extends SimpleCommand implements ICommand {
         from.parent.removeChild(from)
       }
     }
+
+    let gameProxy = this.facade.retrieveProxy(GameProxy.NAME) as GameProxy
 
     switch (name) {
       case SceneCommand.TO_LOADING:
@@ -61,9 +62,11 @@ export default class SceneCommand extends SimpleCommand implements ICommand {
         startScene.init();
         break
       case SceneCommand.TO_GAME:
+        gameProxy.initGameData();
+
         let gameScene: GameScene = (this.facade.retrieveMediator(GameSceneMediator.NAME) as GameSceneMediator).gameScene;
         game.stage.addChild(gameScene)
-        gameScene.init((this.facade.retrieveProxy(GameProxy.NAME) as GameProxy).map);
+        gameScene.init(gameProxy.mapData);
         break
       case SceneCommand.TO_END:
         let endScene: EndScene = (this.facade.retrieveMediator(EndSceneMediator.NAME) as EndSceneMediator).endScene;

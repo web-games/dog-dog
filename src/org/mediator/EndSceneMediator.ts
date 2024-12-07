@@ -1,8 +1,8 @@
 import Mediator = puremvc.Mediator;
 import IMediator = puremvc.IMediator;
 import INotification = puremvc.INotification;
-import StartScene from './view/scene/start/StartScene'
-import EndScene from './view/scene/end/EndScene'
+
+import EndScene from './scenes/end/EndScene'
 import SceneCommand from '../command/SceneCommand'
 
 export default class EndSceneMediator extends Mediator implements IMediator {
@@ -12,6 +12,10 @@ export default class EndSceneMediator extends Mediator implements IMediator {
     super(EndSceneMediator.NAME, viewComponent)
 
     this.endScene.on(EndScene.CLICK_AGAIN, () => {
+      this.sendNotification(SceneCommand.TO_GAME, {from: this.endScene})
+    })
+
+    this.endScene.on(EndScene.CLICK_RESTART, () => {
       this.sendNotification(SceneCommand.TO_START, {from: this.endScene})
     })
   }
@@ -27,7 +31,7 @@ export default class EndSceneMediator extends Mediator implements IMediator {
     }
   }
 
-  get endScene(): StartScene {
-    return (this.viewComponent as StartScene)
+  get endScene(): EndScene {
+    return (this.viewComponent as EndScene)
   }
 }
