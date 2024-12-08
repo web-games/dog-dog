@@ -1,3 +1,4 @@
+import Text = PIXI.Text;
 import Scene from '../Scene';
 import Button from '../../components/Button'
 
@@ -18,6 +19,12 @@ export default class EndScene extends Scene {
   public init() {
     this.addBackground();
 
+    let title_text = new Text('游戏结束', {fill: 0xffffff, fontSize: 64});
+    title_text.anchor.set(0.5, 0.5);
+    title_text.x = this.stageWidth / 2;
+    title_text.y = this.stageHeight / 2 - 160;
+    this.addChild(title_text);
+
     const againButton = new Button('再来一次');
     againButton.x = this.stageWidth / 2;
     againButton.y = this.stageHeight / 2;
@@ -31,6 +38,10 @@ export default class EndScene extends Scene {
     restartButton.interactive = true;
     restartButton.on('pointerdown', () => this.emit(EndScene.CLICK_RESTART));
     this.addChild(restartButton);
+
+    TweenMax.fromTo(title_text.scale, 1, {x: 0, y: 0}, {x: 1, y: 1, ease: Elastic.easeOut, delay: 0.3});
+    TweenMax.fromTo(againButton.scale, 1, {x: 0, y: 0}, {x: 1, y: 1, ease: Elastic.easeOut, delay: 0.45});
+    TweenMax.fromTo(restartButton.scale, 1, {x: 0, y: 0}, {x: 1, y: 1, ease: Elastic.easeOut, delay: 0.6});
   }
 
   private async addBackground() {
@@ -59,7 +70,6 @@ export default class EndScene extends Scene {
     const ticker = new PIXI.Ticker();
     ticker.add(function (deltaTime) {
       uniforms.time += 0.01
-      console.log('update')
     });
     ticker.start();
     this._ticker = ticker;

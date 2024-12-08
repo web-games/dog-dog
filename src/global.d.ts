@@ -19,3 +19,7 @@ type CardDataType = {
   row: number,
   value: number,
 }
+
+declare namespace PIXI {
+  const sound: any;
+}

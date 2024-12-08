@@ -37,7 +37,7 @@ export default class Card extends PIXI.Container {
     this.addChild(graphics)
     this.graphics = graphics;
 
-    /*let text = new PIXI.Text(`${layer} (${row},${col})`, {fontSize: 14, fill: 0x000000})
+    /*let text = new PIXI.Text(`${layer} (${row},${col})`, {fontSize: 14, fill: 0xff0000})
     this.addChild(text)
     text.anchor.set(0.5, 0.5)
     this.text = text*/
@@ -56,6 +56,7 @@ export default class Card extends PIXI.Container {
         this.filters = [];
       })
       this.on('pointertap', (event) => {
+        PIXI.sound.play("swap")
         this.scene.emit(GameScene.CLICK_CARD, event.currentTarget)
       })
     }

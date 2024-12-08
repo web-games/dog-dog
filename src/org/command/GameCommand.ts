@@ -8,6 +8,8 @@ import GameSceneMediator from "../mediator/GameSceneMediator";
 
 export default class GameCommand extends SimpleCommand implements ICommand {
 
+  public static FIRST_TIME_GAME = 'first_time_game';
+
   public static GAME_START = 'game_start';
 
   public static CHECK_OVER_RELATIONSHIP = 'check_over_relationship';
@@ -18,23 +20,29 @@ export default class GameCommand extends SimpleCommand implements ICommand {
 
   public static CHECK_SAME_CARD = 'check_same_card';
 
+  public static CHECK_GAME_OVER = 'check_game_over';
+
   constructor() {
     super()
   }
 
   public execute(notification: INotification) {
     console.log('SceneCommand notification:', notification)
-
-    let name = notification.getName()
-    let body = notification.getBody()
+    const name = notification.getName()
+    const body = notification.getBody()
+    const type = notification.getType()
     // console.log('name:', name);
     // console.log('body:', body);
+    // console.log('type:', type);
 
-    let gameProxy: GameProxy = this.facade.retrieveProxy(GameProxy.NAME) as GameProxy
-    let gameSceneMediator: GameSceneMediator = this.facade.retrieveMediator(GameSceneMediator.NAME) as GameSceneMediator;
-    let gameScene: GameScene = gameSceneMediator.gameScene;
+    const gameProxy: GameProxy = this.facade.retrieveProxy(GameProxy.NAME) as GameProxy
+    const gameSceneMediator: GameSceneMediator = this.facade.retrieveMediator(GameSceneMediator.NAME) as GameSceneMediator;
+    const gameScene: GameScene = gameSceneMediator.gameScene;
 
     switch (name) {
+      case GameCommand.FIRST_TIME_GAME:
+        PIXI.sound.play("worldscenebgm", {loop: true})
+        break;
       case GameCommand.GAME_START:
         gameProxy.initGameData();
 
@@ -47,9 +55,7 @@ export default class GameCommand extends SimpleCommand implements ICommand {
         if (!success)
           return;
 
-        // 检测是否游戏结束
-
-        // 移除当前卡片
+        // 移动当前卡片
         gameScene.moveCard(body, gameProxy.chooseCardList)
 
         // 改变当前网格的状态
@@ -61,10 +67,7 @@ export default class GameCommand extends SimpleCommand implements ICommand {
       case GameCommand.CHECK_OVER_RELATIONSHIP:
         gameProxy.mapData.checkCoverRelationship(body.layer)
         break;
-      case GameCommand.GAME_OVER:
-        // let gameScene: GameScene = (this.facade.retrieveMediator(GameSceneMediator.NAME) as GameSceneMediator).gameScene;
-        // this.sendNotification(SceneCommand.TO_END, {from: gameScene});
-        break;
+
       case GameCommand.CHECK_SAME_CARD:
         const {value} = body;
         const cardArr = gameProxy.chooseCardMap.get(value);
@@ -81,6 +84,17 @@ export default class GameCommand extends SimpleCommand implements ICommand {
 
           gameScene.resetChooseCardPosition(gameProxy.chooseCardList);
         }
+
+        this.sendNotification(GameCommand.CHECK_GAME_OVER)
+        break;
+      case GameCommand.CHECK_GAME_OVER:
+        var gameOver = gameProxy.mapData.checkGridIsAllZero();
+        if (gameOver) {
+          this.sendNotification(GameCommand.GAME_OVER);
+        }
+        break;
+      case GameCommand.GAME_OVER:
+        this.sendNotification(SceneCommand.TO_END, {from: gameScene});
         break;
     }
   }

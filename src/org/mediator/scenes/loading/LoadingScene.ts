@@ -30,11 +30,13 @@ export default class LoadingScene extends Scene {
     screen_bg.on('pointerdown', () => {
       !this.loading && this.emit(LoadingScene.CLICK_CONTINUE);
     })
+    screen_bg.name = 'screen_bg'
 
     let loading_bar_container = new Container();
     this.addChild(loading_bar_container);
     loading_bar_container.x = (this.stageWidth - 300) / 2;
     loading_bar_container.y = (this.stageHeight - 300);
+    loading_bar_container.name = 'loading_bar_container'
 
     const bar_width = 300;
     const bar_height = 16;
@@ -71,7 +73,6 @@ export default class LoadingScene extends Scene {
     loading_bar_mask.drawRoundedRect(0, 0, bar_width, bar_height, bar_radius);
     loading_bar_mask.endFill();
     loading_bar_container.addChild(loading_bar_mask)
-
 
     loading_bar.mask = loading_bar_mask;
     this._loadingBar = loading_bar;

@@ -36,7 +36,7 @@ export default class GameScene extends Scene {
     var animalContainer = new Container();
     this.addChild(animalContainer);
     this.animalContainer = animalContainer;
-    this.animalContainer.x = (this.stageWidth - cols * MapData.GridWidth) / 2
+    this.animalContainer.x = (this.stageWidth - cols * MapData.GridWidth) / 2 + MapData.GridWidth / 2
     this.animalContainer.y = (this.stageHeight - rows * MapData.GridHeight) / 2
 
     for (var l = layers - 1; l >= 0; l--) {

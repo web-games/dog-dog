@@ -1,3 +1,4 @@
+import Text = PIXI.Text;
 import Scene from '../Scene';
 import Button from '../../components/Button'
 
@@ -16,18 +17,22 @@ export default class StartScene extends Scene {
   public init() {
     this.addBackground();
 
+    let title_text = new Text('狗了个狗', {fill: 0xffffff, fontSize: 64});
+    title_text.anchor.set(0.5, 0.5);
+    title_text.x = this.stageWidth / 2;
+    title_text.y = this.stageHeight / 2 - 160;
+    this.addChild(title_text);
+
     var start_btn = new Button('开始游戏');
     start_btn.x = this.stageWidth / 2;
     start_btn.y = this.stageHeight / 2;
-    start_btn.scale.x = start_btn.scale.y = 0;
     this.addChild(start_btn);
 
     start_btn.interactive = true;
-    start_btn.on('pointerdown', () => {
-      this.sceneOut()
-    })
+    start_btn.on('pointerdown', () => this.sceneOut())
 
-    TweenMax.to(start_btn.scale, 1, {x: 1, y: 1, ease: Elastic.easeOut, delay: 0.3});
+    TweenMax.fromTo(title_text.scale, 1, {x: 0, y: 0}, {x: 1, y: 1, ease: Elastic.easeOut, delay: 0.3});
+    TweenMax.fromTo(start_btn.scale, 1, {x: 0, y: 0}, {x: 1, y: 1, ease: Elastic.easeOut, delay: 0.45});
   }
 
   private async addBackground() {

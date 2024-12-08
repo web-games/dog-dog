@@ -42,9 +42,7 @@ export default class SceneCommand extends SimpleCommand implements ICommand {
     if (from) {
       from = from as Scene;
       from.destroy();
-      if (from.parent) {
-        from.parent.removeChild(from)
-      }
+      from.removeAllChildren();
     }
 
     let gameProxy = this.facade.retrieveProxy(GameProxy.NAME) as GameProxy

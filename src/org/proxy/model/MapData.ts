@@ -18,6 +18,7 @@ Array.prototype.shuffle = function () {
 
 const START_NUM = 9;
 const CARD_NUM = 7;
+const MAX_RANDOM = 0.1; // 游戏难度
 
 export default class MapData {
   public static GridWidth = 40
@@ -49,7 +50,7 @@ export default class MapData {
     for (let l = 0; l < layers; l++) {
       for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
-          if (Math.random() < 0.1) {
+          if (Math.random() < MAX_RANDOM) {
             if (!this.check8direction(l, i, j)) {
               let random = parseInt(String(Math.random() * CARD_NUM)) + START_NUM;
               this.data[l][i][j] = random
@@ -157,5 +158,11 @@ export default class MapData {
     }
 
     return false;
+  }
+
+  public checkGridIsAllZero() {
+    let arr = this.data.flat(Infinity);
+    let bo = arr.some(value => value !== 0);
+    return !bo;
   }
 }

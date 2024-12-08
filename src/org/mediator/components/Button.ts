@@ -34,5 +34,8 @@ export default class Button extends Container {
     btn_bg.endFill();
 
     this.interactive = true;
+    this.on('pointerdown', () => {
+      PIXI.sound.play("click")
+    });
   }
 }
