@@ -1,6 +1,6 @@
 # 「狗了个狗」小游戏
 
-[点击这里玩游戏](https://web-games.github.io/dog-dog/dist/index.html)
+[点击这里玩游戏](https://web-games.github.io/dog-is-dog/dist/index.html)
 
 ## 游戏逻辑
 
